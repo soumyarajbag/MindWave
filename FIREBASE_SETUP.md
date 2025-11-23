@@ -26,6 +26,7 @@ The app now works without Firebase Authentication! You can:
 ## Current Status
 
 Your Firebase configuration looks correct:
+
 - ✅ API Key: Set
 - ✅ Project ID: mindwave-smallcase
 - ✅ Auth Domain: mindwave-smallcase.firebaseapp.com
@@ -33,11 +34,13 @@ Your Firebase configuration looks correct:
 - ✅ App ID: Set
 
 **What's missing:**
+
 - ❌ Firebase Authentication service not enabled
 
 ## Quick Fix
 
 The code has been updated to handle missing Authentication gracefully. The app will:
+
 - ✅ Still work without Authentication
 - ✅ Use local storage when auth is unavailable
 - ✅ Show a warning in console (but continue working)
@@ -80,11 +83,11 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-      
+
       match /moods/{moodId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
-      
+
       match /insights/{insightId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
@@ -96,6 +99,7 @@ service cloud.firestore {
 ## Testing
 
 After setup:
+
 1. Restart your dev server: `npm run dev`
 2. The error should be gone
 3. Check browser console - you might see a warning but the app should work
@@ -107,4 +111,3 @@ After setup:
 - Verify your project is active (not deleted/suspended)
 - Check browser console for specific error messages
 - The app will work in Privacy Mode even if Firebase is completely unavailable
-

@@ -1,4 +1,6 @@
 import { MoodCategory, Recommendation } from '@/types';
+import { searchYouTubeVideos, searchYouTubeMusic } from '@/lib/apis/youtube';
+import { searchSpotifyTracks, getSpotifyPlaylist } from '@/lib/apis/spotify';
 
 const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
   happy: [
@@ -36,7 +38,7 @@ const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
       id: 'energetic-2',
       type: 'activity',
       title: 'Productivity Burst',
-      description: 'Tackle that task you\'ve been putting off',
+      description: "Tackle that task you've been putting off",
       moodTarget: ['energetic'],
     },
     {
@@ -59,7 +61,7 @@ const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
       id: 'sad-2',
       type: 'activity',
       title: 'Gratitude Journal',
-      description: 'Write down three things you\'re grateful for',
+      description: "Write down three things you're grateful for",
       moodTarget: ['sad'],
     },
     {
@@ -142,7 +144,7 @@ const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
       id: 'overwhelmed-2',
       type: 'activity',
       title: 'Break It Down',
-      description: 'Let\'s break your tasks into smaller steps',
+      description: "Let's break your tasks into smaller steps",
       moodTarget: ['overwhelmed'],
     },
     {
@@ -156,7 +158,7 @@ const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
       id: 'overwhelmed-4',
       type: 'activity',
       title: 'Talk It Out',
-      description: 'Chat with your AI companion about what\'s on your mind',
+      description: "Chat with your AI companion about what's on your mind",
       moodTarget: ['overwhelmed'],
     },
   ],
@@ -185,18 +187,64 @@ const RECOMMENDATIONS: Record<MoodCategory, Recommendation[]> = {
   ],
 };
 
-export const getRecommendations = (mood: MoodCategory, count: number = 5): Recommendation[] => {
-  const moodRecommendations = RECOMMENDATIONS[mood] || RECOMMENDATIONS.neutral;
-  const otherMoodRecommendations = Object.values(RECOMMENDATIONS)
-    .flat()
-    .filter(rec => rec.moodTarget.includes(mood) && !moodRecommendations.includes(rec));
-  
-  // Mix recommendations from current mood and related moods
-  const allRecommendations = [
-    ...moodRecommendations,
-    ...otherMoodRecommendations.slice(0, 3),
-  ];
-  
+export const getRecommendations = async (
+  mood: MoodCategory,
+  count: number = 8
+): Promise<Recommendation[]> => {
+  const allRecommendations: Recommendation[] = [];
+
+  try {
+    // Fetch real content from APIs
+    const [youtubeVideos, youtubeMusic, spotifyTracks, spotifyPlaylists] = await Promise.allSettled(
+      [
+        searchYouTubeVideos(mood, 3),
+        searchYouTubeMusic(mood, 2),
+        searchSpotifyTracks(mood, 3),
+        getSpotifyPlaylist(mood, 2),
+      ]
+    );
+
+    // Add YouTube videos
+    if (youtubeVideos.status === 'fulfilled') {
+      allRecommendations.push(
+        ...youtubeVideos.value.map((r) => ({ ...r, source: 'youtube' as const }))
+      );
+    }
+
+    // Add YouTube music
+    if (youtubeMusic.status === 'fulfilled') {
+      allRecommendations.push(
+        ...youtubeMusic.value.map((r) => ({ ...r, source: 'youtube' as const }))
+      );
+    }
+
+    // Add Spotify tracks
+    if (spotifyTracks.status === 'fulfilled') {
+      allRecommendations.push(
+        ...spotifyTracks.value.map((r) => ({ ...r, source: 'spotify' as const }))
+      );
+    }
+
+    // Add Spotify playlists
+    if (spotifyPlaylists.status === 'fulfilled') {
+      allRecommendations.push(
+        ...spotifyPlaylists.value.map((r) => ({ ...r, source: 'spotify' as const }))
+      );
+    }
+  } catch (error) {
+    console.error('Error fetching API recommendations:', error);
+  }
+
+  // Add fallback internal recommendations if we don't have enough
+  if (allRecommendations.length < count) {
+    const moodRecommendations = RECOMMENDATIONS[mood] || RECOMMENDATIONS.neutral;
+    const fallbackRecs = moodRecommendations
+      .filter((rec) => !allRecommendations.some((r) => r.id === rec.id))
+      .map((r) => ({ ...r, source: 'internal' as const }));
+
+    allRecommendations.push(...fallbackRecs.slice(0, count - allRecommendations.length));
+  }
+
   // Shuffle and return requested count
   const shuffled = allRecommendations.sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
@@ -216,7 +264,7 @@ export const getMicroHabit = (mood: MoodCategory): Recommendation | null => {
       id: 'habit-sad',
       type: 'activity',
       title: 'Gratitude Moment',
-      description: 'Write down one thing you\'re grateful for',
+      description: "Write down one thing you're grateful for",
       moodTarget: ['sad'],
       duration: 60,
     },
@@ -259,6 +307,6 @@ export const getMicroHabit = (mood: MoodCategory): Recommendation | null => {
       moodTarget: ['neutral'],
     },
   };
-  
+
   return habits[mood] || habits.neutral || null;
 };

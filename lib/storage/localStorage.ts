@@ -56,4 +56,3 @@ export const getUserPreferencesFromLocal = () => {
     enableSocialMediaAnalysis: false,
   });
 };
-

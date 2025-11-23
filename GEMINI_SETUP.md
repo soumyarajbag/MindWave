@@ -33,6 +33,7 @@ NEXT_PUBLIC_GEMINI_MODEL=gemini-1.5-flash
 ```
 
 Available options:
+
 - `gemini-1.5-flash` - Fast, efficient (recommended for most use cases)
 - `gemini-1.5-pro` - More capable, better for complex tasks
 - `gemini-1.5-pro-latest` - Latest version of 1.5-pro
@@ -67,6 +68,7 @@ If `gemini-1.5-flash` isn't available, the code will automatically try `gemini-1
 ### All Models Failing?
 
 If all models fail:
+
 - The AI companion will show an error message
 - Other features (mood detection, recommendations) will still work
 - Weekly insights will use default data instead of AI-generated insights
@@ -76,4 +78,3 @@ If all models fail:
 - Check [Google AI Studio](https://makersuite.google.com/app/apikey) for API status
 - Review [Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
 - Check your API key permissions in Google Cloud Console
-

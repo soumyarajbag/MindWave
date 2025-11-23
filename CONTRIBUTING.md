@@ -21,6 +21,7 @@ Thank you for your interest in contributing to MindWave! This document provides 
 ## Commit Messages
 
 Use clear, descriptive commit messages:
+
 - `feat: Add new breathing exercise component`
 - `fix: Fix mood detection timing issue`
 - `docs: Update README with new features`
@@ -48,4 +49,3 @@ Use clear, descriptive commit messages:
 ## Questions?
 
 Feel free to open an issue for questions or discussions!
-

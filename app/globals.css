@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary: #74B9FF;
-  --theme-secondary: #A29BFE;
+  --theme-primary: #74b9ff;
+  --theme-secondary: #a29bfe;
   --theme-background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  --theme-text: #2D3436;
-  --theme-accent: #74B9FF;
+  --theme-text: #2d3436;
+  --theme-accent: #74b9ff;
 }
 
 * {
@@ -26,7 +26,9 @@ body {
 body {
   background: var(--theme-background);
   color: var(--theme-text);
-  transition: background 0.5s ease, color 0.5s ease;
+  transition:
+    background 0.5s ease,
+    color 0.5s ease;
 }
 
 @layer utilities {
@@ -58,4 +60,3 @@ body {
   border-radius: 50%;
   pointer-events: none;
 }
-

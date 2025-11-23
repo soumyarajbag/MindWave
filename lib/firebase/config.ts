@@ -21,21 +21,21 @@ export const initializeFirebase = () => {
   if (getApps().length > 0) {
     app = getApps()[0];
     db = getFirestore(app);
-    
+
     // Try to get auth if it was initialized
     try {
       auth = getAuth(app);
     } catch {
       // Auth not available, that's okay
     }
-    
+
     // Try to get storage if it was initialized
     try {
       storage = getStorage(app);
     } catch {
       // Storage not available, that's okay
     }
-    
+
     return { app, db, auth, storage };
   }
   const firebaseConfig: FirebaseConfig = {
@@ -56,7 +56,7 @@ export const initializeFirebase = () => {
   try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
-    
+
     // Try to initialize auth, but don't fail if it's not enabled
     try {
       auth = getAuth(app);
@@ -64,7 +64,7 @@ export const initializeFirebase = () => {
       console.warn('Firebase Authentication not enabled or configured:', authError);
       // Auth is optional - app can work without it
     }
-    
+
     // Try to initialize storage, but don't fail if it's not enabled
     try {
       storage = getStorage(app);

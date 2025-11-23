@@ -55,7 +55,7 @@ export default function Header({ weather }: { weather: WeatherData | null }) {
           >
             🎭 Scenes
           </button>
-          
+
           {showScenes && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -102,4 +102,3 @@ export default function Header({ weather }: { weather: WeatherData | null }) {
     </header>
   );
 }
-

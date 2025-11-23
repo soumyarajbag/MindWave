@@ -27,10 +27,10 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     initializeFirebase();
-    
+
     // Load weather data
     getWeatherData().then(setWeather).catch(console.error);
-    
+
     // Initial mood detection
     detectMood();
   }, [detectMood]);
@@ -63,16 +63,14 @@ export default function Home() {
     <main className="min-h-screen relative overflow-hidden">
       {/* Ambient Scene Background */}
       {activeScene && <AmbientScene scene={activeScene} />}
-      
+
       {/* Weather-based particles */}
-      {weather && !activeScene && (
-        <WeatherParticles condition={weather.condition} />
-      )}
+      {weather && !activeScene && <WeatherParticles condition={weather.condition} />}
 
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 py-8">
         <Header weather={weather} />
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
@@ -135,4 +133,3 @@ function WeatherParticles({ condition }: { condition: string }) {
 
   return null;
 }
-

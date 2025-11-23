@@ -1,10 +1,10 @@
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
   limit,
   Timestamp,
   doc,
@@ -19,7 +19,7 @@ export const saveMoodScore = async (userId: string, moodScore: MoodScore) => {
     console.warn('Firestore not initialized. Mood not saved to cloud.');
     return;
   }
-  
+
   try {
     const moodRef = collection(db, 'users', userId, 'moods');
     await addDoc(moodRef, {
@@ -32,26 +32,23 @@ export const saveMoodScore = async (userId: string, moodScore: MoodScore) => {
   }
 };
 
-export const getMoodHistory = async (
-  userId: string, 
-  days: number = 7
-): Promise<MoodScore[]> => {
+export const getMoodHistory = async (userId: string, days: number = 7): Promise<MoodScore[]> => {
   if (!db) {
     console.warn('Firestore not initialized. Returning empty mood history.');
     return [];
   }
-  
+
   try {
     const moodRef = collection(db, 'users', userId, 'moods');
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
-    
+
     const q = query(
       moodRef,
       where('timestamp', '>=', Timestamp.fromDate(cutoffDate)),
       orderBy('timestamp', 'desc')
     );
-    
+
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -63,25 +60,22 @@ export const getMoodHistory = async (
   }
 };
 
-export const saveWeeklyInsight = async (
-  userId: string, 
-  insight: WeeklyInsight
-) => {
+export const saveWeeklyInsight = async (userId: string, insight: WeeklyInsight) => {
   if (!db) {
     console.warn('Firestore not initialized. Insight not saved to cloud.');
     return;
   }
-  
+
   try {
     const insightRef = doc(db, 'users', userId, 'insights', insight.weekStart.toISOString());
     await setDoc(insightRef, {
       ...insight,
       weekStart: Timestamp.fromDate(insight.weekStart),
-      moodTrends: insight.moodTrends.map(t => ({
+      moodTrends: insight.moodTrends.map((t) => ({
         ...t,
         date: Timestamp.fromDate(t.date),
       })),
-      stressPatterns: insight.stressPatterns.map(p => ({
+      stressPatterns: insight.stressPatterns.map((p) => ({
         ...p,
         date: Timestamp.fromDate(p.date),
       })),
@@ -97,11 +91,11 @@ export const getUser = async (userId: string): Promise<User | null> => {
     console.warn('Firestore not initialized. Cannot fetch user.');
     return null;
   }
-  
+
   try {
     const userRef = doc(db, 'users', userId);
     const userSnap = await getDoc(userRef);
-    
+
     if (userSnap.exists()) {
       const data = userSnap.data();
       return {
@@ -122,7 +116,7 @@ export const createOrUpdateUser = async (user: User) => {
     console.warn('Firestore not initialized. User not saved to cloud.');
     return;
   }
-  
+
   try {
     const userRef = doc(db, 'users', user.id);
     await setDoc(userRef, {
@@ -135,4 +129,3 @@ export const createOrUpdateUser = async (user: User) => {
     // Don't throw - allow app to continue
   }
 };
-

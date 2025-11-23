@@ -11,6 +11,7 @@ npm install
 ## Step 2: Get API Keys
 
 ### Required:
+
 1. **Firebase**: Create a project at [Firebase Console](https://console.firebase.google.com/)
    - Enable Firestore
    - Copy config from Project Settings
@@ -18,6 +19,7 @@ npm install
 2. **Gemini**: Get API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 
 ### Optional:
+
 - **OpenWeatherMap**: Sign up at [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
 
 ## Step 3: Configure Environment
@@ -54,17 +56,19 @@ Visit `http://localhost:3000` 🎉
 ## Troubleshooting
 
 **Firebase errors?**
+
 - Check all env variables are set
 - Verify Firestore is enabled
 - Check browser console for specific errors
 
 **Gemini not working?**
+
 - Verify API key is correct
 - Check API quota hasn't been exceeded
 
 **Weather not loading?**
+
 - App will work without weather API
 - Check geolocation permissions in browser
 
 That's it! You're ready to use MindWave! 🌈
-

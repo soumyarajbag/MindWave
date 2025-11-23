@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useMoodStore } from '@/store/moodStore';
-import { getUserPreferencesFromLocal, saveUserPreferencesToLocal } from '@/lib/storage/localStorage';
+import {
+  getUserPreferencesFromLocal,
+  saveUserPreferencesToLocal,
+} from '@/lib/storage/localStorage';
 import { User } from '@/types';
 
 export default function PrivacyMode() {
@@ -53,9 +56,7 @@ export default function PrivacyMode() {
         <div>
           <h3 className="font-semibold text-sm mb-1">Privacy Mode</h3>
           <p className="text-xs text-white/70">
-            {privacyMode
-              ? 'Data stored locally only'
-              : 'Data synced to cloud'}
+            {privacyMode ? 'Data stored locally only' : 'Data synced to cloud'}
           </p>
         </div>
         <button
@@ -74,4 +75,3 @@ export default function PrivacyMode() {
     </motion.div>
   );
 }
-

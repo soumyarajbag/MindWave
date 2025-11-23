@@ -24,12 +24,14 @@ A vibe-first, intelligent, mood-aware web experience that automatically detects 
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set up environment variables:
-Create a `.env.local` file with:
+   Create a `.env.local` file with:
+
 ```
 NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
@@ -40,11 +42,14 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
 NEXT_PUBLIC_GEMINI_MODEL=gemini-1.5-flash  # Optional: gemini-1.5-pro, gemini-pro
 NEXT_PUBLIC_OPENWEATHER_API_KEY=your_weather_api_key
+NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key
 NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret  # Server-side only
 NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -90,25 +95,31 @@ mindwave/
 ## Key Features Explained
 
 ### 🎯 Automated Mood Detection
+
 - **Typing Pattern Analysis**: Detects sentiment from typed text, typing speed, and backspace frequency
 - **Activity Patterns**: Monitors tab switching, social media usage, and reading time
 - **Device Usage**: Tracks late-night usage and overall activity levels
 - **Weather Impact**: Adjusts mood detection based on current weather conditions
 
 ### 🎨 Dynamic UI Themes
+
 The interface automatically adapts based on:
+
 - **Detected Mood**: Each mood has a unique color scheme and animation
 - **Weather Conditions**: Rain, snow, sun, and night modes with particle effects
 - **Ambient Scenes**: Optional 3D backgrounds (rain, cozy room, lanterns, galaxy, beach)
 
 ### 🤖 AI Companion
+
 Powered by Google Gemini:
+
 - Context-aware conversations
 - Mood-specific responses
 - Emotional support and coping strategies
 - Personalized recommendations
 
 ### 📊 Weekly Insights
+
 - Visual mood trends over time
 - AI-generated insights and recommendations
 - Trigger identification
@@ -136,14 +147,18 @@ Powered by Google Gemini:
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
 
 ### Environment Variables
 
 See `.env.example` for all required environment variables. Minimum required:
+
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `NEXT_PUBLIC_GEMINI_API_KEY`
 
 Optional (app works without these):
+
 - `NEXT_PUBLIC_OPENWEATHER_API_KEY` - For weather features
 - `NEXT_PUBLIC_SPOTIFY_CLIENT_ID` - For music recommendations
 - `NEXT_PUBLIC_TMDB_API_KEY` - For movie recommendations
@@ -155,4 +170,3 @@ This is a personal project, but suggestions and improvements are welcome!
 ## License
 
 MIT
-

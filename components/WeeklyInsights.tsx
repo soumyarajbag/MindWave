@@ -31,7 +31,7 @@ export default function WeeklyInsights() {
       try {
         // Get mood history from Firebase
         const history = await getMoodHistory(user.id, 7);
-        
+
         if (history.length === 0) {
           setLoading(false);
           return;
@@ -39,10 +39,10 @@ export default function WeeklyInsights() {
 
         // Generate AI insights
         const aiInsight = await generateWeeklyInsight(history);
-        
+
         const weeklyInsight: WeeklyInsight = {
           weekStart: startOfWeek(new Date()),
-          moodTrends: history.map(m => ({
+          moodTrends: history.map((m) => ({
             date: m.timestamp,
             mood: m.category,
             score: m.score,
@@ -114,9 +114,7 @@ export default function WeeklyInsights() {
                 }}
                 title={`${format(trend.date, 'MMM d')}: ${trend.mood} (${trend.score})`}
               />
-              <span className="text-xs text-white/50 mt-2">
-                {format(trend.date, 'MMM d')}
-              </span>
+              <span className="text-xs text-white/50 mt-2">{format(trend.date, 'MMM d')}</span>
             </div>
           ))}
         </div>
@@ -156,4 +154,3 @@ export default function WeeklyInsights() {
     </motion.div>
   );
 }
-

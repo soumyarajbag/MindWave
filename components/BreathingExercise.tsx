@@ -8,10 +8,7 @@ interface BreathingExerciseProps {
   onComplete?: () => void;
 }
 
-export default function BreathingExercise({ 
-  duration = 120, 
-  onComplete 
-}: BreathingExerciseProps) {
+export default function BreathingExercise({ duration = 120, onComplete }: BreathingExerciseProps) {
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale' | 'pause'>('inhale');
   const [scale, setScale] = useState(1);
@@ -95,7 +92,9 @@ export default function BreathingExercise({
     <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold mb-2">{phaseText[phase]}</h3>
-        <p className="text-white/70">Time remaining: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</p>
+        <p className="text-white/70">
+          Time remaining: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+        </p>
       </div>
 
       <div className="flex items-center justify-center mb-6">
@@ -139,4 +138,3 @@ export default function BreathingExercise({
     </div>
   );
 }
-

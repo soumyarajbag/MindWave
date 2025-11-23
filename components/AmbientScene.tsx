@@ -22,31 +22,48 @@ export default function AmbientScene({ scene }: { scene: AmbientSceneType }) {
 
 function RainScene() {
   const particles = useRef<THREE.Points>(null);
-  
+  const geometryRef = useRef<THREE.BufferGeometry | null>(null);
+
   useEffect(() => {
     if (!particles.current) return;
-    
+
     const geometry = new THREE.BufferGeometry();
     const count = 1000;
     const positions = new Float32Array(count * 3);
-    
+
     for (let i = 0; i < count * 3; i++) {
       positions[i] = (Math.random() - 0.5) * 20;
     }
-    
+
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.current.geometry = geometry;
+    geometryRef.current = geometry;
+
+    return () => {
+      // Cleanup
+      if (geometryRef.current) {
+        geometryRef.current.dispose();
+      }
+    };
   }, []);
 
   useFrame((state) => {
-    if (particles.current) {
-      particles.current.rotation.y += 0.001;
-      const positions = particles.current.geometry.attributes.position.array as Float32Array;
+    if (!particles.current || !geometryRef.current) return;
+
+    const geometry = particles.current.geometry;
+    if (!geometry || !geometry.attributes || !geometry.attributes.position) return;
+
+    particles.current.rotation.y += 0.001;
+
+    const positionAttribute = geometry.attributes.position;
+    const positions = positionAttribute.array as Float32Array;
+
+    if (positions && positions.length > 0) {
       for (let i = 1; i < positions.length; i += 3) {
         positions[i] -= 0.1;
         if (positions[i] < -10) positions[i] = 10;
       }
-      particles.current.geometry.attributes.position.needsUpdate = true;
+      positionAttribute.needsUpdate = true;
     }
   });
 
@@ -78,7 +95,7 @@ function LanternsScene() {
 
 function Lantern({ position }: { position: [number, number, number] }) {
   const mesh = useRef<THREE.Mesh>(null);
-  
+
   useFrame((state) => {
     if (mesh.current) {
       mesh.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.5;
@@ -95,26 +112,38 @@ function Lantern({ position }: { position: [number, number, number] }) {
 
 function GalaxyScene() {
   const particles = useRef<THREE.Points>(null);
-  
+  const geometryRef = useRef<THREE.BufferGeometry | null>(null);
+
   useEffect(() => {
     if (!particles.current) return;
-    
+
     const geometry = new THREE.BufferGeometry();
     const count = 2000;
     const positions = new Float32Array(count * 3);
-    
+
     for (let i = 0; i < count * 3; i++) {
       positions[i] = (Math.random() - 0.5) * 10;
     }
-    
+
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.current.geometry = geometry;
+    geometryRef.current = geometry;
+
+    return () => {
+      // Cleanup
+      if (geometryRef.current) {
+        geometryRef.current.dispose();
+      }
+    };
   }, []);
 
   useFrame(() => {
-    if (particles.current) {
-      particles.current.rotation.y += 0.0005;
-    }
+    if (!particles.current || !geometryRef.current) return;
+
+    const geometry = particles.current.geometry;
+    if (!geometry) return;
+
+    particles.current.rotation.y += 0.0005;
   });
 
   return (
@@ -138,4 +167,3 @@ function BeachScene() {
     </>
   );
 }
-

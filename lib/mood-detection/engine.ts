@@ -2,22 +2,65 @@ import { MoodCategory, MoodScore, MoodSignals, WeatherCondition } from '@/types'
 
 // Positive and negative word lists for sentiment analysis
 const POSITIVE_WORDS = [
-  'happy', 'great', 'awesome', 'amazing', 'wonderful', 'excellent', 'good', 'nice',
-  'love', 'like', 'enjoy', 'fun', 'excited', 'joy', 'pleasure', 'delight', 'fantastic',
-  'brilliant', 'perfect', 'beautiful', 'wonderful', 'glad', 'pleased', 'grateful'
+  'happy',
+  'great',
+  'awesome',
+  'amazing',
+  'wonderful',
+  'excellent',
+  'good',
+  'nice',
+  'love',
+  'like',
+  'enjoy',
+  'fun',
+  'excited',
+  'joy',
+  'pleasure',
+  'delight',
+  'fantastic',
+  'brilliant',
+  'perfect',
+  'beautiful',
+  'wonderful',
+  'glad',
+  'pleased',
+  'grateful',
 ];
 
 const NEGATIVE_WORDS = [
-  'sad', 'bad', 'terrible', 'awful', 'hate', 'angry', 'frustrated', 'stressed',
-  'worried', 'anxious', 'depressed', 'tired', 'exhausted', 'overwhelmed', 'upset',
-  'disappointed', 'hurt', 'pain', 'suffering', 'difficult', 'hard', 'struggle'
+  'sad',
+  'bad',
+  'terrible',
+  'awful',
+  'hate',
+  'angry',
+  'frustrated',
+  'stressed',
+  'worried',
+  'anxious',
+  'depressed',
+  'tired',
+  'exhausted',
+  'overwhelmed',
+  'upset',
+  'disappointed',
+  'hurt',
+  'pain',
+  'suffering',
+  'difficult',
+  'hard',
+  'struggle',
 ];
 
 export class MoodDetectionEngine {
   private typingHistory: Array<{ text: string; timestamp: Date; backspaces: number }> = [];
   private activityHistory: Array<{ type: string; timestamp: Date }> = [];
 
-  analyzeTypingPattern(text: string, backspaces: number = 0): {
+  analyzeTypingPattern(
+    text: string,
+    backspaces: number = 0
+  ): {
     sentiment: number;
     speed: number;
     backspaces: number;
@@ -27,14 +70,12 @@ export class MoodDetectionEngine {
     let positiveCount = 0;
     let negativeCount = 0;
 
-    words.forEach(word => {
-      if (POSITIVE_WORDS.some(pw => word.includes(pw))) positiveCount++;
-      if (NEGATIVE_WORDS.some(nw => word.includes(nw))) negativeCount++;
+    words.forEach((word) => {
+      if (POSITIVE_WORDS.some((pw) => word.includes(pw))) positiveCount++;
+      if (NEGATIVE_WORDS.some((nw) => word.includes(nw))) negativeCount++;
     });
 
-    const wordSentiment = words.length > 0 
-      ? (positiveCount - negativeCount) / words.length 
-      : 0;
+    const wordSentiment = words.length > 0 ? (positiveCount - negativeCount) / words.length : 0;
 
     // Typing speed (words per minute approximation)
     const speed = words.length > 0 ? Math.min(words.length * 2, 100) : 50;
@@ -52,11 +93,7 @@ export class MoodDetectionEngine {
     };
   }
 
-  analyzeActivityPattern(
-    tabSwitches: number,
-    timeOnSocialMedia: number,
-    readingTime: number
-  ) {
+  analyzeActivityPattern(tabSwitches: number, timeOnSocialMedia: number, readingTime: number) {
     this.activityHistory.push({
       type: 'activity',
       timestamp: new Date(),
@@ -96,15 +133,15 @@ export class MoodDetectionEngine {
     // Typing pattern analysis
     if (signals.typingPattern) {
       const { sentiment, speed, backspaces, wordSentiment } = signals.typingPattern;
-      
+
       score += sentiment * 20;
-      score += (wordSentiment > 0 ? 10 : -10);
-      
+      score += wordSentiment > 0 ? 10 : -10;
+
       // High backspaces indicate stress
       if (backspaces > 5) {
         score -= 15;
       }
-      
+
       // Very slow typing might indicate tiredness
       if (speed < 20) {
         score -= 10;
@@ -114,17 +151,17 @@ export class MoodDetectionEngine {
     // Activity pattern analysis
     if (signals.activityPattern) {
       const { tabSwitches, timeOnSocialMedia, readingTime } = signals.activityPattern;
-      
+
       // High tab switching indicates anxiety/stress
       if (tabSwitches > 10) {
         score -= 15;
       }
-      
+
       // Long reading time indicates calm
       if (readingTime > 5) {
         score += 10;
       }
-      
+
       // Excessive social media might indicate negative mood
       if (timeOnSocialMedia > 30) {
         score -= 10;
@@ -134,11 +171,11 @@ export class MoodDetectionEngine {
     // Device usage analysis
     if (signals.deviceUsage) {
       const { lateNightUsage, activityLevel } = signals.deviceUsage;
-      
+
       if (lateNightUsage) {
         score -= 10;
       }
-      
+
       score += (activityLevel - 50) * 0.2;
     }
 
@@ -206,4 +243,3 @@ export class MoodDetectionEngine {
 }
 
 export const moodEngine = new MoodDetectionEngine();
-

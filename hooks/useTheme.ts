@@ -137,4 +137,3 @@ export const useTheme = (weatherCondition?: WeatherCondition) => {
 
   return theme;
 };
-

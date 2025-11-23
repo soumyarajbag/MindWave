@@ -10,11 +10,7 @@ export const metadata: Metadata = {
   description: 'A vibe-first, intelligent, mood-aware web experience',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -24,4 +20,3 @@ export default function RootLayout({
     </html>
   );
 }
-

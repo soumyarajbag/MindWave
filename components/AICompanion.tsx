@@ -36,10 +36,7 @@ export default function AICompanion() {
     setIsTyping(true);
 
     try {
-      const response = await chatWithAI(
-        [...chatMessages, userMessage],
-        currentMood?.category
-      );
+      const response = await chatWithAI([...chatMessages, userMessage], currentMood?.category);
 
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -76,10 +73,7 @@ export default function AICompanion() {
           <h2 className="text-xl font-bold">AI Companion</h2>
         </div>
         {chatMessages.length > 0 && (
-          <button
-            onClick={clearChat}
-            className="text-sm text-white/70 hover:text-white transition"
-          >
+          <button onClick={clearChat} className="text-sm text-white/70 hover:text-white transition">
             Clear
           </button>
         )}
@@ -115,8 +109,14 @@ export default function AICompanion() {
             >
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div
+                  className="w-2 h-2 bg-white/50 rounded-full animate-bounce"
+                  style={{ animationDelay: '0.1s' }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-white/50 rounded-full animate-bounce"
+                  style={{ animationDelay: '0.2s' }}
+                ></div>
               </div>
               <span className="text-sm">AI is typing...</span>
             </motion.div>
@@ -159,9 +159,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
     >
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-          isUser
-            ? 'bg-white/20 text-white'
-            : 'bg-white/10 text-white/90'
+          isUser ? 'bg-white/20 text-white' : 'bg-white/10 text-white/90'
         }`}
       >
         <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -175,4 +173,3 @@ function MessageBubble({ message }: { message: ChatMessage }) {
     </motion.div>
   );
 }
-

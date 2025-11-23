@@ -49,9 +49,7 @@ export default function MoodDisplay() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20"
       >
-        <p className="text-lg text-center text-white/80">
-          Detecting your mood...
-        </p>
+        <p className="text-lg text-center text-white/80">Detecting your mood...</p>
       </motion.div>
     );
   }
@@ -86,7 +84,7 @@ export default function MoodDisplay() {
               {Math.round(confidence * 100)}% confidence
             </span>
           </div>
-          
+
           {/* Mood Score Bar */}
           <div className="w-full bg-white/20 rounded-full h-4 overflow-hidden">
             <motion.div
@@ -115,14 +113,16 @@ export default function MoodDisplay() {
 
 function getMoodDescription(category: MoodCategory, score: number): string {
   const descriptions: Record<MoodCategory, string> = {
-    happy: "You're feeling great! This is a perfect time to spread positivity and enjoy the moment.",
+    happy:
+      "You're feeling great! This is a perfect time to spread positivity and enjoy the moment.",
     energetic: "You're full of energy! Channel this into something productive or creative.",
     sad: "It's okay to feel this way. Take some time for self-care and gentle activities.",
     stressed: "You're feeling overwhelmed. Let's take a moment to breathe and reset.",
     calm: "You're in a peaceful state. This is perfect for reflection and mindful activities.",
-    overwhelmed: "Things feel like a lot right now. Remember to take breaks and be kind to yourself.",
-    neutral: "You're in a balanced state. A good time to explore new things or maintain your routine.",
+    overwhelmed:
+      'Things feel like a lot right now. Remember to take breaks and be kind to yourself.',
+    neutral:
+      "You're in a balanced state. A good time to explore new things or maintain your routine.",
   };
   return descriptions[category];
 }
-

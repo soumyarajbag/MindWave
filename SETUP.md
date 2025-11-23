@@ -26,11 +26,13 @@ npm install
 ### 3. Get API Keys
 
 #### Google Gemini API
+
 1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
 2. Create a new API key
 3. Copy the API key
 
 #### OpenWeatherMap API (Optional)
+
 1. Sign up at [OpenWeatherMap](https://openweathermap.org/api)
 2. Get your free API key
 3. Copy the API key
@@ -73,11 +75,11 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-      
+
       match /moods/{moodId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
-      
+
       match /insights/{insightId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
@@ -89,6 +91,7 @@ service cloud.firestore {
 ## Features Overview
 
 ### Core Features
+
 - ✅ Automated mood detection
 - ✅ Mood-based recommendations
 - ✅ AI companion (Gemini)
@@ -108,16 +111,19 @@ service cloud.firestore {
 ## Troubleshooting
 
 ### Firebase Not Initializing
+
 - Check that all Firebase environment variables are set
 - Verify Firebase project is active
 - Check browser console for specific errors
 
 ### Gemini API Errors
+
 - Verify API key is correct
 - Check API quota/limits
 - Ensure API key has proper permissions
 
 ### Weather Not Loading
+
 - Check OpenWeatherMap API key
 - Verify geolocation permissions in browser
 - Weather will default to a generic state if API fails
@@ -148,4 +154,3 @@ npm start
 ## Support
 
 For issues or questions, check the project README or open an issue on GitHub.
-

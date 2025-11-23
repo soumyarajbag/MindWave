@@ -16,7 +16,8 @@ export const getWeatherData = async (lat?: number, lon?: number): Promise<Weathe
       lon = position.lon;
     }
 
-    const apiKey = typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY : undefined;
+    const apiKey =
+      typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY : undefined;
     if (!apiKey) {
       // Return default weather if API key not configured
       return getDefaultWeather();
@@ -31,10 +32,10 @@ export const getWeatherData = async (lat?: number, lon?: number): Promise<Weathe
     }
 
     const data = await response.json();
-    
+
     // Map weather condition to our WeatherCondition type
     const condition = mapWeatherCondition(data.weather[0].main, data.weather[0].id);
-    
+
     return {
       condition,
       temperature: Math.round(data.main.temp),
@@ -100,7 +101,7 @@ const mapWeatherCondition = (main: string, id: number): WeatherCondition => {
 const getDefaultWeather = (): WeatherData => {
   const hour = new Date().getHours();
   const isNight = hour >= 20 || hour < 6;
-  
+
   return {
     condition: isNight ? 'night' : 'sunny',
     temperature: 22,
@@ -108,4 +109,3 @@ const getDefaultWeather = (): WeatherData => {
     location: 'Unknown',
   };
 };
-

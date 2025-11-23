@@ -1,25 +1,19 @@
-export type MoodCategory = 
-  | 'happy' 
-  | 'energetic' 
-  | 'sad' 
-  | 'stressed' 
-  | 'calm' 
-  | 'overwhelmed' 
+export type MoodCategory =
+  | 'happy'
+  | 'energetic'
+  | 'sad'
+  | 'stressed'
+  | 'calm'
+  | 'overwhelmed'
   | 'neutral';
 
-export type WeatherCondition = 
-  | 'rain' 
-  | 'sunny' 
-  | 'cloudy' 
-  | 'snow' 
-  | 'night' 
-  | 'fog';
+export type WeatherCondition = 'rain' | 'sunny' | 'cloudy' | 'snow' | 'night' | 'fog';
 
-export type ThemeName = 
-  | 'cozy-purple-blue' 
-  | 'zen-minimal' 
-  | 'vibrant-rainbow' 
-  | 'pastel-minimal' 
+export type ThemeName =
+  | 'cozy-purple-blue'
+  | 'zen-minimal'
+  | 'vibrant-rainbow'
+  | 'pastel-minimal'
   | 'neon-spark';
 
 export interface MoodScore {
@@ -65,6 +59,8 @@ export interface Recommendation {
   thumbnail?: string;
   moodTarget: MoodCategory[];
   duration?: number;
+  previewUrl?: string; // For Spotify audio previews
+  source?: 'youtube' | 'spotify' | 'internal'; // Track where recommendation came from
 }
 
 export interface WeeklyInsight {
@@ -114,4 +110,3 @@ export interface AmbientScene {
   type: 'rain' | 'cozy-room' | 'lanterns' | 'galaxy' | 'beach';
   active: boolean;
 }
-
