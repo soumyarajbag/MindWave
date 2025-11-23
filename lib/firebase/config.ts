@@ -22,18 +22,18 @@ export const initializeFirebase = () => {
     app = getApps()[0];
     db = getFirestore(app);
 
-    // Try to get auth if it was initialized
-    try {
+    // Always try to get auth - getAuth doesn't throw, it always returns an Auth instance
+    if (!auth) {
       auth = getAuth(app);
-    } catch {
-      // Auth not available, that's okay
     }
 
     // Try to get storage if it was initialized
-    try {
-      storage = getStorage(app);
-    } catch {
-      // Storage not available, that's okay
+    if (!storage) {
+      try {
+        storage = getStorage(app);
+      } catch {
+        // Storage not available, that's okay
+      }
     }
 
     return { app, db, auth, storage };
@@ -57,15 +57,11 @@ export const initializeFirebase = () => {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
 
-    // Try to initialize auth, but don't fail if it's not enabled
-    try {
-      auth = getAuth(app);
-    } catch (authError) {
-      console.warn('Firebase Authentication not enabled or configured:', authError);
-      // Auth is optional - app can work without it
-    }
+    // Initialize auth - getAuth always returns an Auth instance
+    // It doesn't throw errors, but auth might not work if not enabled in Firebase Console
+    auth = getAuth(app);
 
-    // Try to initialize storage, but don't fail if it's not enabled
+    // Try to initialize storage
     try {
       storage = getStorage(app);
     } catch (storageError) {

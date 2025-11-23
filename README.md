@@ -11,6 +11,8 @@ A vibe-first, intelligent, mood-aware web experience that automatically detects 
 - 📊 **Weekly Insights** - Track your mood trends and patterns
 - 🌦️ **Weather Integration** - UI adapts to weather conditions
 - 🎭 **Ambient Scenes** - Beautiful animated backgrounds
+- 🔐 **Google Authentication** - Secure sign-in with Google
+- 🏠 **Landing Page** - Beautiful introduction to MindWave
 
 ## Tech Stack
 
@@ -29,7 +31,12 @@ A vibe-first, intelligent, mood-aware web experience that automatically detects 
 npm install
 ```
 
-2. Set up environment variables:
+2. **Enable Firebase Authentication** (Required):
+   - Go to Firebase Console → Authentication
+   - Enable Google sign-in provider
+   - See `AUTHENTICATION_SETUP.md` for detailed instructions
+
+3. Set up environment variables:
    Create a `.env.local` file with:
 
 ```
@@ -54,7 +61,15 @@ NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Run the development server:
+
+```bash
+npm run dev
+```
+
+5. Open [http://localhost:3000/landing](http://localhost:3000/landing) in your browser.
+
+6. Click "Get Started" and sign in with Google to access the app.
 
 ## Project Structure
 
