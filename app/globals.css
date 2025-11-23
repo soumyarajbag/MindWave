@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --theme-primary: #74B9FF;
+  --theme-secondary: #A29BFE;
+  --theme-background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  --theme-text: #2D3436;
+  --theme-accent: #74B9FF;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body {
+  background: var(--theme-background);
+  color: var(--theme-text);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Rain animation */
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  animation: rain 0.5s linear infinite;
+}
+
+/* Snow animation */
+.snowflake {
+  position: absolute;
+  color: white;
+  font-size: 1em;
+  animation: snow 3s linear infinite;
+}
+
+/* Particle effects */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
