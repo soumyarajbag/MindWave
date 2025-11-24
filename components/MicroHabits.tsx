@@ -7,7 +7,7 @@ import { getMicroHabit } from '@/lib/recommendations/generator';
 import ActivityModal from './ActivityModal';
 import { getActivityCompletions } from '@/lib/storage/activities';
 
-const HABIT_ICONS: Record = {
+const HABIT_ICONS = {
   'habit-sad': '💝',
   'habit-stressed': '🧘',
   'habit-overwhelmed': '🎯',
@@ -21,7 +21,7 @@ export default function MicroHabits() {
   const { currentMood } = useMoodStore();
   const [habit, setHabit] = useState(getMicroHabit(currentMood?.category || 'neutral'));
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [completions, setCompletions] = useState<Record>({});
+  const [completions, setCompletions] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (currentMood) {
@@ -30,13 +30,16 @@ export default function MicroHabits() {
   }, [currentMood]);
 
   useEffect(() => {
-    setCompletions(getActivityCompletions());
+    getActivityCompletions().then((completions) => setCompletions(completions));
   }, [isModalOpen]);
 
   if (!habit) return null;
 
   const completionCount = completions[habit.id] || 0;
-  const icon = HABIT_ICONS[habit.id] || '✨';
+  const icon = HABIT_ICONS[habit.id as keyof typeof HABIT_ICONS] || HABIT_ICONS['habit-neutral'];
+  if (!icon) {
+    throw new Error(`Icon not found for habit: ${habit.id}`);
+  }
 
   return (
     <>

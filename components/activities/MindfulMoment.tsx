@@ -46,7 +46,8 @@ export default function MindfulMoment({ onComplete }: MindfulMomentProps) {
     } else if (timeLeft === 0 && step === prompts.length - 1) {
       onComplete?.();
     }
-  }, [timeLeft, step, prompts.length, onComplete]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, step, onComplete]);
 
   const currentPrompt = prompts[step];
   const progress = ((60 - timeLeft) / 60) * 100;

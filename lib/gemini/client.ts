@@ -1,5 +1,7 @@
 import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 import { MoodCategory, ChatMessage, WeeklyInsight, MoodScore } from '@/types';
+import { startOfWeek } from 'date-fns';
+import { Timestamp } from 'firebase/firestore';
 
 let genAI: GoogleGenerativeAI | null = null;
 
@@ -95,9 +97,7 @@ export const generateMoodInsight = async (moodHistory: MoodScore[]): Promise<str
   return 'I notice some patterns in your mood. Keep tracking to see more insights!';
 };
 
-export const generateWeeklyInsight = async (
-  moodHistory: MoodScore[]
-): Promise<Omit<WeeklyInsight, 'weekStart'>> => {
+export const generateWeeklyInsight = async (moodHistory: MoodScore[]): Promise<WeeklyInsight> => {
   // Strategy: Pro -> Flash (Pro is better at JSON)
   const analysisModels = [MODEL_PRO, MODEL_FLASH];
 
@@ -106,7 +106,7 @@ export const generateWeeklyInsight = async (
       // JSON mode ensures valid output
       const model = getGeminiModel(modelName, {
         responseMimeType: 'application/json',
-      });
+      } as GenerationConfig);
 
       const moodData = moodHistory.map((m) => ({
         date: m.timestamp.toISOString(),
@@ -146,11 +146,12 @@ export const generateWeeklyInsight = async (
 
   // Fallback Data
   return {
+    weekStart: startOfWeek(new Date()),
     moodTrends: moodHistory.map((m) => ({
       date: m.timestamp,
       mood: m.category,
       score: m.score,
-    })),
+    })) as { date: Date; mood: MoodCategory; score: number }[],
     triggers: [],
     activeTime: [],
     energyLevels: [],

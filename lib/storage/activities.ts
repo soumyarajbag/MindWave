@@ -17,7 +17,7 @@ const GRATITUDE_KEY = 'mindwave_gratitude_entries';
 const PRIORITY_KEY = 'mindwave_priority_checks';
 const ACTIVITY_COMPLETIONS_KEY = 'mindwave_activity_completions';
 
-export const saveGratitudeEntry = async (text: string): Promise => {
+export const saveGratitudeEntry = async (text: string): Promise<void> => {
   const entries = getFromLocalStorage<GratitudeEntry[]>(GRATITUDE_KEY, []);
   const newEntry: GratitudeEntry = {
     id: Date.now().toString(),
@@ -29,11 +29,14 @@ export const saveGratitudeEntry = async (text: string): Promise => {
   saveToLocalStorage(GRATITUDE_KEY, entries.slice(0, 50));
 };
 
-export const getGratitudeEntries = async (): Promise => {
+export const getGratitudeEntries = async (): Promise<GratitudeEntry[]> => {
   return getFromLocalStorage<GratitudeEntry[]>(GRATITUDE_KEY, []);
 };
 
-export const savePriorityCheck = async (priorities: string[], topPriority: number): Promise => {
+export const savePriorityCheck = async (
+  priorities: string[],
+  topPriority: number
+): Promise<void> => {
   const checks = getFromLocalStorage<PriorityCheck[]>(PRIORITY_KEY, []);
   const newCheck: PriorityCheck = {
     id: Date.now().toString(),
@@ -46,16 +49,16 @@ export const savePriorityCheck = async (priorities: string[], topPriority: numbe
   saveToLocalStorage(PRIORITY_KEY, checks.slice(0, 30));
 };
 
-export const getPriorityChecks = async (): Promise => {
+export const getPriorityChecks = async (): Promise<PriorityCheck[]> => {
   return getFromLocalStorage<PriorityCheck[]>(PRIORITY_KEY, []);
 };
 
-export const saveActivityCompletion = (activityId: string): void => {
-  const completions = getFromLocalStorage<Record>(ACTIVITY_COMPLETIONS_KEY, {});
+export const saveActivityCompletion = async (activityId: string): Promise<void> => {
+  const completions = getFromLocalStorage<Record<string, number>>(ACTIVITY_COMPLETIONS_KEY, {});
   completions[activityId] = (completions[activityId] || 0) + 1;
   saveToLocalStorage(ACTIVITY_COMPLETIONS_KEY, completions);
 };
 
-export const getActivityCompletions = (): Record => {
-  return getFromLocalStorage<Record>(ACTIVITY_COMPLETIONS_KEY, {});
+export const getActivityCompletions = async (): Promise<Record<string, number>> => {
+  return getFromLocalStorage<Record<string, number>>(ACTIVITY_COMPLETIONS_KEY, {});
 };

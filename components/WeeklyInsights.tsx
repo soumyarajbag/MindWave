@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 import { useMoodStore } from '@/store/moodStore';
 import { getMoodHistory } from '@/lib/firebase/mood';
 import { generateWeeklyInsight } from '@/lib/gemini/client';
-import { WeeklyInsight, MoodCategory } from '@/types';
+import { WeeklyInsight, MoodScore } from '@/types';
 import { format, startOfWeek } from 'date-fns';
+import { MoodCategory } from '@/types';
 
-const MOOD_COLORS: Record<MoodCategory, string> = {
+const MOOD_COLORS = {
   happy: '#FFD700',
   energetic: '#FF6B6B',
   sad: '#6C5CE7',
@@ -41,12 +42,6 @@ export default function WeeklyInsights() {
         const aiInsight = await generateWeeklyInsight(history);
 
         const weeklyInsight: WeeklyInsight = {
-          weekStart: startOfWeek(new Date()),
-          moodTrends: history.map((m) => ({
-            date: m.timestamp,
-            mood: m.category,
-            score: m.score,
-          })),
           ...aiInsight,
         };
 
@@ -109,7 +104,7 @@ export default function WeeklyInsights() {
                 className="w-full rounded-t transition-all hover:opacity-80"
                 style={{
                   height: `${(trend.score / 100) * 100}%`,
-                  backgroundColor: MOOD_COLORS[trend.mood],
+                  backgroundColor: MOOD_COLORS[trend.mood as keyof typeof MOOD_COLORS],
                   minHeight: '4px',
                 }}
                 title={`${format(trend.date, 'MMM d')}: ${trend.mood} (${trend.score})`}

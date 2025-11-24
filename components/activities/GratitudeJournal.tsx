@@ -56,8 +56,8 @@ export default function GratitudeJournal({ onComplete }: GratitudeJournalProps) 
       <div>
         <h3 className="text-2xl font-bold mb-2">Gratitude Journal</h3>
         <p className="text-white/70 mb-4">
-          Take a moment to reflect on something you're grateful for today. This simple practice can
-          help shift your perspective and improve your mood.
+          Take a moment to reflect on something you&apos;re grateful for today. This simple practice
+          can help shift your perspective and improve your mood.
         </p>
       </div>
 
