@@ -3,7 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import {
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+} from 'firebase/auth';
 import { initializeFirebase, auth } from '@/lib/firebase/config';
 import { createOrUpdateUser } from '@/lib/firebase/mood';
 import { useMoodStore } from '@/store/moodStore';
@@ -42,6 +47,38 @@ export default function LoginPage() {
 
     setAuthReady(true);
 
+    // Check for redirect result first (after Google redirects back)
+    getRedirectResult(initializedAuth)
+      .then(async (result) => {
+        if (result) {
+          const user = result.user;
+          const mindwaveUser: User = {
+            id: user.uid,
+            email: user.email || undefined,
+            name: user.displayName || undefined,
+            preferences: {
+              privacyMode: false,
+              enableVoiceDetection: false,
+              enableSocialMediaAnalysis: false,
+            },
+            createdAt: new Date(),
+            lastActive: new Date(),
+          };
+
+          setUser(mindwaveUser);
+          await createOrUpdateUser(mindwaveUser);
+          toast.success('Welcome to MindWave! 🌈');
+          router.push('/dashboard');
+        } else {
+          setIsChecking(false);
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting redirect result:', error);
+        setIsChecking(false);
+      });
+
+    // Also listen for auth state changes
     const unsubscribe = onAuthStateChanged(initializedAuth, async (firebaseUser) => {
       if (firebaseUser) {
         // User is signed in
@@ -60,14 +97,15 @@ export default function LoginPage() {
 
         setUser(user);
         await createOrUpdateUser(user);
-        router.push('/dashboard');
-      } else {
-        setIsChecking(false);
+        // Don't redirect here if we're already handling redirect result
+        if (!isChecking) {
+          router.push('/dashboard');
+        }
       }
     });
 
     return () => unsubscribe();
-  }, [router, setUser]);
+  }, [router, setUser, isChecking]);
 
   const handleGoogleLogin = async () => {
     if (!authReady) {
@@ -105,35 +143,14 @@ export default function LoginPage() {
         prompt: 'select_account',
       });
 
-      const result = await signInWithPopup(currentAuth, provider);
-      const user = result.user;
-
-      const mindwaveUser: User = {
-        id: user.uid,
-        email: user.email || undefined,
-        name: user.displayName || undefined,
-        preferences: {
-          privacyMode: false,
-          enableVoiceDetection: false,
-          enableSocialMediaAnalysis: false,
-        },
-        createdAt: new Date(),
-        lastActive: new Date(),
-      };
-
-      setUser(mindwaveUser);
-      await createOrUpdateUser(mindwaveUser);
-      toast.success('Welcome to MindWave! 🌈');
-      router.push('/dashboard');
+      // Use redirect instead of popup to avoid COOP issues
+      await signInWithRedirect(currentAuth, provider);
+      // Note: User will be redirected to Google, then back to this page
+      // The redirect result is handled in useEffect above
     } catch (error: any) {
       console.error('Error signing in:', error);
-      if (error.code === 'auth/popup-closed-by-user') {
-        toast.error('Sign-in cancelled');
-      } else {
-        toast.error('Failed to sign in. Please try again.');
-      }
-    } finally {
       setIsLoading(false);
+      toast.error('Failed to sign in. Please try again.');
     }
   };
 
